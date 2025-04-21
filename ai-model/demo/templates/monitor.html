@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+    <script type="text/javascript" src="../static/accept.js" defer></script>
+    <title>Monitor</title>
+</head>
+<body>
+    <div id="main">
+        <div id="control">
+            <h2>Manual Control</h2>
+            <form action="post">
+                <div class="input-grp">
+                    <label for="temp">Temperature:</label><input type="number" name="temp" min="16" max="30">
+                </div>
+                <div class="input-grp">
+                    <label for="mode">Mode:</label><input type="text" name="mode" list="modelist">
+                </div>
+                <div class="input-grp">
+                    <label for="fan">Fan:</label><input type="text" name="fan" list="fanlist">
+                </div>
+                <button type="button">Swing</button><button type="submit">Set</button>
+                <button type="button" id="on">On/Off</button>
+            </form>
+            <h2>Auto Control</h2>
+            <form action="/submit_temps" method="post" id="tempForm">
+                <label for="building">Building: 
+                    <input type="radio" name="building" id="two" value="2">2
+                </label>
+                <button type="submit" id="set">Simulation</button>
+            </form>
+            <datalist id="modelist">
+                <option value="Cool">Cool</option>
+                <option value="Dry">Dry</option>
+                <option value="Fan">Fan</option>
+            </datalist>
+            <datalist id="fanlist">
+                <option value="High">High</option>
+                <option value="Mid">Mid</option>
+                <option value="Low">Low</option>
+                <option value="Auto">Auto</option>
+            </datalist>
+        </div>
+        <div id="current">
+            <h2>Current Status</h2>
+            <p>Temperature: <span id="current-temp">22</span></p>
+            <p>Mode: <span id="current-mode">Cool</span></p>
+            <p>Fan: <span id="current-fan">Auto</span></p>
+            <p>Swing: <span id="current-swing">Off</span></p>
+        </div>
+        <div id="temp">
+            <h2>Temperature</h2>
+            <p>Indoor: <span id="indoor-temp">24°C</span></p>
+            <p>Outdoor: <span id="outdoor-temp">32°C</span></p>
+        </div>
+        <div id="hum">
+            <h2>Humidity</h2>
+            <p>Indoor: <span id="indoor-hum">60%</span></p>
+            <p>Outdoor: <span id="outdoor-hum">45%</span></p>
+        </div>
+        <div id="iaq">
+            <h2>Air Quality</h2>
+            <p>PM2.5: <span id="pm25">12 µg/m³</span></p>
+            <p>CO2: <span id="co2">600 ppm</span></p>
+        </div>
+        <div id="energy">
+            <h2>Energy Consumption</h2>
+            <p>Today: <span id="today-energy">2.5 kWh</span></p>
+            <p>This Month: <span id="month-energy">75 kWh</span></p>
+        </div>
+    </div>
+</body>
+</html>

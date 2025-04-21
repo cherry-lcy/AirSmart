@@ -1,0 +1,56 @@
+.dashboard-container{
+    display: grid; 
+    grid-template-areas:
+    "curr curr temp"
+    "energy humid aq";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 16px;
+
+}
+
+span{
+    font-weight:bolder;
+}
+
+.status-grp{
+    display:inline;
+}
+
+.temp-chart{
+    display:inline;
+}
+
+.status-container{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+
+#curr-status{
+    grid-area:curr;
+}
+
+#temp{
+    grid-area:temp;
+}
+
+#energy{
+    grid-area:energy;
+}
+
+#humid{
+    grid-area:humid;
+}
+
+#air-quality{
+    grid-area:aq;
+}
+
+.loading-container{
+    margin:50px auto;
+}
+
+.loading-word{
+    font-size:20px;
+    text-align:center;
+}

@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false  # 确保关闭
+          fetch-depth: 0     # 重要！获取完整历史
+
+      - name: Debug - list directory
+        run: ls -R
+
+      - name: Install and Build
+        working-directory: ./client
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./client/build

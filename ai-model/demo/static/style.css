@@ -1,0 +1,150 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #4a90e2;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+}
+
+#main {
+    display: grid;
+    grid-template-areas:
+        "ctr curr curr temp"
+        "ctr ener hum iaq";
+    grid-template-columns: 300px 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 20px;
+    width: 90%;
+    max-width: 1200px;
+    height: 90vh;
+    background-color:rgba(0,0,0,0.1);
+    opacity:1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#control {
+    grid-area: ctr;
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#current {
+    grid-area: curr;
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#temp {
+    grid-area: temp;
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#hum {
+    grid-area: hum;
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#iaq {
+    grid-area: iaq;
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#energy {
+    grid-area: ener;
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+p {
+    margin: 10px 0;
+    color: #555;
+}
+
+span {
+    font-weight: bold;
+    color: #000;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom:20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input, button {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.input-grp{
+    display:inline-block;
+    justify-content:space-between;
+    position:relative;
+}
+
+.input-grp input {
+    width: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.input-grp {
+    display: flex;
+    align-items: center;
+    gap: 10; 
+}
+
+.input-grp label {
+    margin-right: 10px;
+    min-width: 60px;
+}
+
+.input-grp input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding-left: 5px;
+}

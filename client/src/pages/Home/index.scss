@@ -1,0 +1,39 @@
+.user-info-container{
+    display:flex;
+    justify-content: space-evenly;
+    padding-top: 20px;
+    box-sizing: border-box;
+    margin:0 auto;
+}
+
+.user-description{
+    width:100%;
+    font-size:18px;
+    p{
+        margin:10px 0px;
+    }
+}
+
+.user-info-container{
+    display:grid;
+    grid-template-areas:"info info service";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 20px;
+}
+
+#info-display{
+    grid-area: info;
+}
+
+#service-display{
+    grid-area: service;
+}
+
+.service-grp{
+    padding: 20px 0px;
+    box-sizing: border-box;
+    Button{
+        width:100%;
+        margin:10px 0px;
+    }
+}
