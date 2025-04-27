@@ -11,7 +11,7 @@ env = ACControlEnv(
 
 # print initial states
 obs = env.reset()
-print("Initial observation data shape:", obs.shape)  # 应为(10,2)
+print("Initial observation data shape:", obs.shape)
 print("Initial room temperature:", obs[-1, 0])
 
 # print states after 1 action
