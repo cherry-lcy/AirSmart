@@ -1,6 +1,7 @@
 import {Avatar, Breadcrumb, Button, Card} from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import {useSelector} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import "./index.scss";
 
 const {Meta} = Card;
@@ -10,6 +11,12 @@ const Home = ()=>{
     const userInfo = useSelector(state => {
         return state.user.userInfo
     });
+
+    const navigate = useNavigate();
+
+    const changePassword = ()=>{
+        navigate("/main/home/change-password");
+    }
 
     return (<div>
         <Card title={<Breadcrumb items={[{title: 'Home'},]}/>}>
@@ -27,7 +34,7 @@ const Home = ()=>{
                 <Card id="service-display">
                     <Meta title="User Service"></Meta>
                     <div className="service-grp">
-                        <Button>Change Password</Button>
+                        <Button onClick={changePassword}>Change Password</Button>
                         <Button>Help</Button>
                         <Button>Delete Account</Button>
                     </div>

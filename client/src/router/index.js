@@ -7,6 +7,7 @@ import Home from '../pages/Home';
 import Dashboard from '../pages/Dashboard';
 import History from '../pages/History';
 import Panel from '../pages/Panel';
+import ChangePassword from '../pages/ChangePassword';
 
 const router = createBrowserRouter([
     {
@@ -23,7 +24,13 @@ const router = createBrowserRouter([
         children:[
             {
                 path:'home',
-                element:<Home/>
+                element:<Home/>,
+                children:[
+                    {
+                        path:'change-password',
+                        element:<ChangePassword/>
+                    }
+                ]
             },
             {
                 path:'panel',
