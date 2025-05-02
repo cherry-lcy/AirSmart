@@ -32,10 +32,10 @@ function verifyUser(req, userFile, secret){
         const userData = readUsers(userFile);
 
         if (!authHeader) {
-            return res.status(401).json({
+            return {
                 status: "error",
                 message: "Authorization header missing"
-            });
+            };
         }
 
         const token = authHeader.split(' ')[1];
