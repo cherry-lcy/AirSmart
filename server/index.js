@@ -145,7 +145,7 @@ app.post('/v1/control', (req, res)=>{
 
         addRecord({
             ...acStatus,
-            user: Admin.username,
+            user: message.username,
             ip: req.ip
         })
 
