@@ -77,7 +77,7 @@ For detailed information regarding the construction and training of the AI model
 
 # Installation
 1. Clone the repository:
-    git clone https://github.com/yourusername/air-conditioner-platform.git
+    git clone [https://github.com/cherry-lcy/air-conditioner-platform.git](https://github.com/cherry-lcy/AirSmart)
 
 2. Install dependencies
     Frontend:
