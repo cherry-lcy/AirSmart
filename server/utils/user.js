@@ -1,11 +1,10 @@
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const path = require("path");
+const userRepository = require("./../repositories/userRepository");
 
 function readUsers(userFile){
     try{
-        const userInfo = fs.readFileSync(userFile, 'utf-8');
-        return JSON.parse(userInfo);
+        return userRepository.getAll();
     }
     catch(e){
         console.error('Error reading users file:', e);
@@ -41,12 +40,12 @@ function verifyUser(req, userFile, secret){
         const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, secret);
 
-        const found = userData.users.find(item => item.uid == decoded.uid);
+        const found = userRepository.getByUsername(userData.username);
 
-        if(found){
+        if(found.verify(userData.username, userData.password)){
             return {
                 status: "true",
-                message: found
+                message: found.getProfile()
             }
         }
         else{
