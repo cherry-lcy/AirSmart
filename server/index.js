@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const path = require("path");
 const {addRecord, getHistory, clearAllHistory} = require("./utils/historyStorage");
-const {verifyUser, readUsers, writeUsers} = require("./utils/user");
+const {verifyUser} = require("./utils/user");
+const userRepository = require("./repositories/userRepository");
 
 const app = express();
 
@@ -31,67 +32,79 @@ let acStatus = {
 }
 
 // user authorization api
-app.post('/v1/authorization', (req, res)=>{
+app.post('/v1/authorization', async (req, res)=>{
     const {username, password} = req.body;
     console.log("post: ", req.body);
 
-    const userData = readUsers(USER_FILE);
-    const user = userData.users.find(item=>item.username===username);
+    const userData = await userRepository.getByUsername(username);
+    const user = userData.data;
     
-    if(username===user.username && password===user.password){
-        const token = jwt.sign({ uid: user.uid }, secret, {expiresIn: "4h"})
+    if(username === user.username && password === user.password){
+        const token = jwt.sign({ uid: user.uid, password: user.password }, secret, {expiresIn: "4h"})
         res.send({
             status:"ok",
             data:{
                 token: token,
                 username: user.username,
                 uid: user.uid
-            }
+            },
+            timestamp: new Date().toISOString()
         })
     }
     else{
         res.status(403).send({
             status:"error",
-            data:"Either username or password is incorrect."
+            data:"Either username or password is incorrect.",
+            timestamp: new Date().toISOString()
         })
     }
 })
 
 // get user profile api
-app.get('/v1/user/profile', (req, res) => {
-    const {status, message} = verifyUser(req, USER_FILE, secret);
+app.get('/v1/user/profile', async (req, res) => {
+    const {status, message} = await verifyUser(req, secret);
     
     if (status === "true") {
         return res.json({
             status: "ok",
             data: {
-                userInfo: message
-            }
+                userInfo: {
+                    uid: message.uid,
+                    username: message.username,
+                    email: message.email,
+                    register_time: message.register_time,
+                    role: message.role
+                }
+            },
+            timestamp: new Date().toISOString()
         });
     }
     else if(status === "false"){
         return res.status(401).json({
             status: "error",
-            data: "Invalid credentials"
+            data: "Invalid credentials",
+            timestamp: new Date().toISOString()
         });
     }
     else if(status === "error"){
         return res.status(403).json({
             status: "error",
-            data: message
+            data: message,
+            timestamp: new Date().toISOString()
         });
     }  
 });
 
 app.post('/v1/change-password', (req, res)=>{
     const {username, currPassword, newPassword} = req.body;
-    const {status, message} = verifyUser(req, USER_FILE, secret);
+    const {status, message} = verifyUser(req, secret);
 
     if(message === "true"){
         if(currPassword === newPassword){
             return res.status(403).send({
                 status:"error",
-                data:"New password cannot be the same as current password."
+                data:"New password cannot be the same as current password.",
+                timestamp: new Date().toISOString()
             })
         }
 
@@ -103,26 +116,30 @@ app.post('/v1/change-password', (req, res)=>{
         if(writeUsers(USER_FILE, userData)){
             return res.send({
                 status:"ok",
-                data:"Password changed sucessfully."
+                data: "Password changed sucessfully.",
+                timestamp: new Date().toISOString()
             })
         }
         else{
             return res.status(500).send({
                 status:"error",
-                data:"Fail to change password"
+                data:"Fail to change password",
+                timestamp: new Date().toISOString()
             })
         }
     }
     else if(status === "false"){
         return res.status(401).json({
             status: "error",
-            data: "Invalid credentials"
+            data: "Invalid credentials",
+            timestamp: new Date().toISOString()
         });
     }
     else if(status === "error"){
         return res.status(403).json({
             status: "error",
-            data: message
+            data: message,
+            timestamp: new Date().toISOString()
         });
     }  
 });
@@ -133,7 +150,7 @@ app.post('/v1/control', (req, res)=>{
     const {temperature, mode, fan, swing} = req.body;
     console.log("control")
 
-    const {status, message} = verifyUser(req, USER_FILE, secret);
+    const {status, message} = verifyUser(req, secret);
 
     if(status === "true"){
         acStatus.on = switchOn;
@@ -151,62 +168,70 @@ app.post('/v1/control', (req, res)=>{
 
         return res.send({
             status:"ok",
-            data:acStatus
+            data:acStatus,
+            timestamp: new Date().toISOString()
         })
     }
     else if(status === "false"){
         return res.status(401).send({
             status:"error",
-            data:"Invalid credentials"
+            data:"Invalid credentials",
+            timestamp: new Date().toISOString()
         })
     }
     else if(status === "error"){
         return res.status(403).send({
             status:"error",
-            data:message
+            data:message,
+            timestamp: new Date().toISOString()
         })
     }
 })
 
 // get control history api
 app.get('/v1/control/history', (req, res) => {
-    const { status, message } = verifyUser(req, USER_FILE, secret);
+    const { status, message } = verifyUser(req, secret);
     console.log("get history");
 
     if (status === "false") {
         return res.status(401).json({
             status: "error",
-            message: "Invalid credentials"
+            message: "Invalid credentials",
+            timestamp: new Date().toISOString()
         });
     }
     else if(status === "error"){
         return res.status(403).send({
             status:"error",
-            data:message
+            data:message,
+            timestamp: new Date().toISOString()
         })
     }
 
     res.json({
         status: "ok",
-        data: getHistory()
+        data: getHistory(),
+        timestamp: new Date().toISOString()
     });
 });
 
 // clear all record api
 app.delete('/v1/control/history', (req, res) => {
-    const { status, message } = verifyUser(req, USER_FILE, secret);
+    const { status, message } = verifyUser(req, secret);
     console.log("delete history");
 
     if (status === "false") {
         return res.status(401).json({
             status: "error",
-            message: "Invalid credentials"
+            message: "Invalid credentials",
+            timestamp: new Date().toISOString()
         });
     }
     else if(status === "error"){
         return res.status(403).send({
             status:"error",
-            data:message
+            data:message,
+            timestamp: new Date().toISOString()
         })
     }
 
@@ -214,7 +239,8 @@ app.delete('/v1/control/history', (req, res) => {
     
     res.json({
         status: "ok",
-        data: getHistory()
+        data: getHistory(),
+        timestamp: new Date().toISOString()
     });
 });
 

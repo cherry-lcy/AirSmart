@@ -1,34 +1,10 @@
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
 const userRepository = require("./../repositories/userRepository");
 
-function readUsers(userFile){
-    try{
-        return userRepository.getAll();
-    }
-    catch(e){
-        console.error('Error reading users file:', e);
-        return [];
-    }
-}
-
-function writeUsers(userFile, data){
-    try{
-        const users = readUsers(userFile);
-        fs.writeFileSync(userFile, JSON.stringify(data, null, 2));
-        return false;
-    }
-    catch(e){
-        console.error('Error reading users file:', e);
-        return false;
-    }
-}
-
 // verify user token
-function verifyUser(req, userFile, secret){
+async function verifyUser(req, secret){
     try{
         const authHeader = req.get("Authorization");
-        const userData = readUsers(userFile);
 
         if (!authHeader) {
             return {
@@ -40,12 +16,14 @@ function verifyUser(req, userFile, secret){
         const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, secret);
 
-        const found = userRepository.getByUsername(userData.username);
+        const found = await userRepository.getByUid(decoded.uid);
+        const userData = found.data;
+        console.log(decoded, userData);
 
-        if(found.verify(userData.username, userData.password)){
+        if(found.success && userData.uid === decoded.uid && userData.password === decoded.password){
             return {
                 status: "true",
-                message: found.getProfile()
+                message: userData
             }
         }
         else{
@@ -64,4 +42,4 @@ function verifyUser(req, userFile, secret){
     }
 }
 
-module.exports = { verifyUser, readUsers, writeUsers };
+module.exports = {verifyUser};
